@@ -44,6 +44,6 @@ This will have slightly different behaviour depending on the language of a subpr
 * __Java__: No updates are performed. To upgrade dependencies you must update their versions referenced in your `.projenrc` and synthesize them so that the changes are reflected in the `pom.xml`
 
 !!!note
-    If you're using the `MonorepoTsProject`, dependency versions in TypeScript subprojects will also be synchronised across the monorepo using [syncpack](https://github.com/JamieMason/syncpack).
+    If you're using the `MonorepoTsProject`, dependency versions in TypeScript subprojects will also be synchronised across the monorepo using [syncpack](https://syncpack.dev).
 
 To upgrade dependencies for an individual TypeScript or Python project, you can run `npx projen upgrade` within that package.

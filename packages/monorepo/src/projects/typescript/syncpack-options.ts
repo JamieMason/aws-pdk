@@ -1,11 +1,11 @@
 /*! Copyright [Amazon.com](http://amazon.com/), Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0 */
 
-// JSII compatible fork of types from https://github.com/JamieMason/syncpack/blob/main/src/config/types.ts (v12.3.0)
+// JSII compatible fork of types from https://github.com/JamieMason/syncpack/blob/main/npm/syncpack.ts (v14)
 
 /**
  * Types and constants for Syncpack usage in the monorepo
- * @see https://jamiemason.github.io/syncpack
+ * @see https://syncpack.dev/
  */
 export namespace Syncpack {
   /**
@@ -36,8 +36,7 @@ export namespace Syncpack {
     | "<"
     | "<="
     | "^"
-    | "~"
-    | "workspace:";
+    | "~";
 
   export const CUSTOM_TYPES = {
     dev: {
@@ -89,58 +88,52 @@ export namespace Syncpack {
   // https://github.com/JamieMason/syncpack/blob/db2b31ccdb1a28fdbe0c42d27ce956ea5c6c543a/src/specifier/index.ts#L16-L27
   export type SpecifierType = string;
 
-  export namespace BaseGroupConfig {
-    export interface GroupConfig {
-      readonly dependencies?: string[];
-      readonly dependencyTypes?: DependencyType[];
-      readonly label?: string;
-      readonly packages?: string[];
-      readonly specifierTypes?: SpecifierType[];
-    }
+  export interface GroupSelector {
+    readonly dependencies?: string[];
+    readonly dependencyTypes?: DependencyType[];
+    readonly label?: string;
+    readonly packages?: string[];
+    readonly specifierTypes?: SpecifierType[];
   }
 
   export namespace SemverGroupConfig {
-    export interface Disabled extends BaseGroupConfig.GroupConfig {
-      readonly isDisabled: true;
-    }
-
-    export interface Ignored extends BaseGroupConfig.GroupConfig {
+    export interface Ignored extends GroupSelector {
       readonly isIgnored: true;
     }
 
-    export interface WithRange extends BaseGroupConfig.GroupConfig {
+    export interface WithRange extends GroupSelector {
       readonly range: SemverRange;
     }
 
-    export type Any = Disabled | Ignored | WithRange;
+    export type Any = Ignored | WithRange;
   }
 
   export namespace VersionGroupConfig {
-    export interface Banned extends BaseGroupConfig.GroupConfig {
+    export interface Banned extends GroupSelector {
       readonly isBanned: true;
     }
 
-    export interface Ignored extends BaseGroupConfig.GroupConfig {
+    export interface Ignored extends GroupSelector {
       readonly isIgnored: true;
     }
 
-    export interface Pinned extends BaseGroupConfig.GroupConfig {
+    export interface Pinned extends GroupSelector {
       readonly pinVersion: string;
     }
 
-    export interface SnappedTo extends BaseGroupConfig.GroupConfig {
+    export interface SnappedTo extends GroupSelector {
       readonly snapTo: string[];
     }
 
-    export interface SameRange extends BaseGroupConfig.GroupConfig {
+    export interface SameRange extends GroupSelector {
       readonly policy: "sameRange";
     }
 
-    export interface SnappedTo extends BaseGroupConfig.GroupConfig {
-      readonly snapTo: string[];
+    export interface SameMinor extends GroupSelector {
+      readonly policy: "sameMinor";
     }
 
-    export interface Standard extends BaseGroupConfig.GroupConfig {
+    export interface Standard extends GroupSelector {
       readonly preferVersion?: "highestSemver" | "lowestSemver";
     }
 
@@ -148,6 +141,7 @@ export namespace Syncpack {
       | Banned
       | Ignored
       | Pinned
+      | SameMinor
       | SameRange
       | SnappedTo
       | Standard;
@@ -182,64 +176,63 @@ export namespace Syncpack {
       | VersionsByName;
   }
 
-  export interface CliConfig {
-    readonly configPath?: string;
-    readonly filter: string;
-    readonly indent: string;
-    readonly source: string[];
-    readonly specs: string;
-    readonly types: string;
+  export interface DependencyGroup {
+    readonly aliasName: string;
+    readonly dependencies?: string[];
+    readonly dependencyTypes?: DependencyType[];
+    readonly packages?: string[];
+    readonly specifierTypes?: SpecifierType[];
   }
 
   /**
    * Configuration for Syncpack
-   * @see https://jamiemason.github.io/syncpack
+   * @see https://syncpack.dev/
    */
   export interface SyncpackConfig {
-    /** @see https://jamiemason.github.io/syncpack/config/custom-types */
+    /** @see https://syncpack.dev/config/custom-types/ */
     readonly customTypes?: Record<string, CustomTypeConfig.Any>;
-    /** @see https://jamiemason.github.io/syncpack/config/dependency-types */
-    readonly dependencyTypes?: DependencyType[];
-    /** @see https://jamiemason.github.io/syncpack/config/filter */
-    readonly filter?: string;
-    /** @see https://jamiemason.github.io/syncpack/config/format-bugs */
+    /** @see https://syncpack.dev/config/dependency-groups/ */
+    readonly dependencyGroups?: DependencyGroup[];
+    /** @see https://syncpack.dev/config/format-bugs/ */
     readonly formatBugs?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/format-repository */
+    /** @see https://syncpack.dev/config/format-repository/ */
     readonly formatRepository?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/indent */
+    /** @see https://syncpack.dev/config/indent/ */
     readonly indent?: string;
-    /** @see https://jamiemason.github.io/syncpack/config/lint-formatting */
-    readonly lintFormatting?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/lint-semver-ranges */
-    readonly lintSemverRanges?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/lint-versions */
-    readonly lintVersions?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/semver-groups */
+    /** @see https://syncpack.dev/ */
+    readonly maxConcurrentRequests?: number;
+    /** @see https://syncpack.dev/semver-groups/ */
     readonly semverGroups?: SemverGroupConfig.Any[];
-    /** @see https://jamiemason.github.io/syncpack/config/sort-az */
+    /** @see https://syncpack.dev/config/sort-az/ */
     readonly sortAz?: string[];
-    /** @see https://jamiemason.github.io/syncpack/config/sort-exports */
+    /** @see https://syncpack.dev/config/sort-exports/ */
     readonly sortExports?: string[];
-    /** @see https://jamiemason.github.io/syncpack/config/sort-first */
+    /** @see https://syncpack.dev/config/sort-first/ */
     readonly sortFirst?: string[];
-    /** @see https://jamiemason.github.io/syncpack/config/sort-packages */
+    /** @see https://syncpack.dev/config/sort-packages/ */
     readonly sortPackages?: boolean;
-    /** @see https://jamiemason.github.io/syncpack/config/source */
+    /** @see https://syncpack.dev/config/source/ */
     readonly source?: string[];
-    /** @see https://jamiemason.github.io/syncpack/config/specifier-types */
-    readonly specifierTypes?: SpecifierType[];
-    /** @see https://jamiemason.github.io/syncpack/config/version-groups */
+    /** @see https://syncpack.dev/ */
+    readonly strict?: boolean;
+    /** @see https://syncpack.dev/version-groups/ */
     readonly versionGroups?: VersionGroupConfig.Any[];
   }
 
   /**
    * Default monorepo configuration for Syncpack
-   * @see https://jamiemason.github.io/syncpack/
+   * @see https://syncpack.dev/
    */
   export const DEFAULT_CONFIG: Syncpack.SyncpackConfig = {
-    filter: ".",
     indent: "  ",
     semverGroups: [
+      {
+        label: "Ignore local workspace deps",
+        dependencies: ["**"],
+        dependencyTypes: ["local"],
+        packages: ["**"],
+        isIgnored: true,
+      },
       {
         dependencies: ["**"],
         dependencyTypes: ["**"],
@@ -258,6 +251,14 @@ export namespace Syncpack {
     ],
     sortFirst: ["name", "description", "version", "author"],
     source: [],
-    versionGroups: [],
+    versionGroups: [
+      {
+        label: "Ignore local workspace deps",
+        dependencies: ["**"],
+        dependencyTypes: ["local"],
+        packages: ["**"],
+        isIgnored: true,
+      },
+    ],
   };
 }

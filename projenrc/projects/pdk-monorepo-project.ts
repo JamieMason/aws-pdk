@@ -47,10 +47,7 @@ export class PDKMonorepoProject extends MonorepoTsProject {
         "tsx",
       ],
       monorepoUpgradeDepsOptions: {
-        syncpackConfig: {
-          ...Syncpack.DEFAULT_CONFIG,
-          dependencyTypes: ["!local"],
-        },
+        syncpackConfig: Syncpack.DEFAULT_CONFIG,
       },
       deps: [
         "fast-xml-parser",

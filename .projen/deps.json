@@ -120,7 +120,7 @@
     },
     {
       "name": "syncpack",
-      "version": "^13",
+      "version": "^14",
       "type": "build"
     },
     {

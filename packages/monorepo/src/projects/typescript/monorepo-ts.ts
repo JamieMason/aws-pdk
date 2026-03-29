@@ -479,7 +479,7 @@ export class MonorepoTsProject
 
   private addUpgradeDepsTask() {
     if (this._options.monorepoUpgradeDeps !== false) {
-      this.addDevDeps("npm-check-updates", "syncpack@^13");
+      this.addDevDeps("npm-check-updates", "syncpack@^14");
 
       const upgradeDepsTask = this.addTask(
         this._options.monorepoUpgradeDepsOptions?.taskName || "upgrade-deps",
@@ -523,7 +523,7 @@ export class MonorepoTsProject
         NodePackageUtils.command.exec(
           this.package.packageManager,
           "syncpack",
-          "fix-mismatches"
+          "fix"
         )
       );
       upgradeDepsTask.exec(`rm ${this.package.lockFile}`);
